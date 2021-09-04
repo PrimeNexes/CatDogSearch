@@ -1,5 +1,5 @@
 import Voice from '@react-native-voice/voice';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -18,13 +18,15 @@ function App(){
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
-    Voice.onSpeechStart = onSpeechStart;
+  useEffect(()=>{Voice.onSpeechStart = onSpeechStart;
     Voice.onSpeechRecognized = onSpeechRecognized;
     Voice.onSpeechEnd = onSpeechEnd;
     Voice.onSpeechError = onSpeechError;
     Voice.onSpeechResults = onSpeechResults;
     Voice.onSpeechPartialResults = onSpeechPartialResults;
+    Voice.getSpeechRecognitionServices();
+  },[])
+    
 
   const onSpeechStart = (e) => {
     console.log('onSpeechStart: ', e);
@@ -78,7 +80,7 @@ function App(){
     //   partialResults: [],
     //   end: '',
     // });
-
+    console.log("STARTING")
     try {
       await Voice.start('en-US');
     } catch (e) {
@@ -108,7 +110,7 @@ function App(){
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-         <Button icon="camera" mode="contained" onPress={()=>_startRecognizing()}>Press me</Button>
+         <Button icon="camera" mode="contained" onPress={_startRecognizing}>Press me</Button>
       </ScrollView>
     </SafeAreaView>
   );
