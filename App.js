@@ -19,57 +19,56 @@ function App(){
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  Voice.onSpeechStart = this.onSpeechStart;
-    Voice.onSpeechRecognized = this.onSpeechRecognized;
-    Voice.onSpeechEnd = this.onSpeechEnd;
-    Voice.onSpeechError = this.onSpeechError;
-    Voice.onSpeechResults = this.onSpeechResults;
-    Voice.onSpeechPartialResults = this.onSpeechPartialResults;
-    Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged;
+    Voice.onSpeechStart = onSpeechStart;
+    Voice.onSpeechRecognized = onSpeechRecognized;
+    Voice.onSpeechEnd = onSpeechEnd;
+    Voice.onSpeechError = onSpeechError;
+    Voice.onSpeechResults = onSpeechResults;
+    Voice.onSpeechPartialResults = onSpeechPartialResults;
 
-  onSpeechStart = (e) => {
+  const onSpeechStart = (e) => {
     console.log('onSpeechStart: ', e);
     // this.setState({
     //   started: '√',
     // });
   };
 
-  onSpeechRecognized = (e) => {
+  const onSpeechRecognized = (e) => {
     console.log('onSpeechRecognized: ', e);
     // this.setState({
     //   recognized: '√',
     // });
   };
 
-  onSpeechEnd = (e) => {
+  const onSpeechEnd = (e) => {
     console.log('onSpeechEnd: ', e);
     // this.setState({
     //   end: '√',
     // });
   };
 
-  onSpeechError = (e) => {
+  const onSpeechError = (e) => {
     console.log('onSpeechError: ', e);
     // this.setState({
     //   error: JSON.stringify(e.error),
     // });
   };
 
-  onSpeechResults = (e) => {
+  const onSpeechResults = (e) => {
     console.log('onSpeechResults: ', e);
     // this.setState({
     //   results: e.value,
     // });
   };
 
-  onSpeechPartialResults = (e) => {
+  const onSpeechPartialResults = (e) => {
     console.log('onSpeechPartialResults: ', e);
     // this.setState({
     //   partialResults: e.value,
     // });
   };
 
-  _startRecognizing = async () => {
+  const _startRecognizing = async () => {
     // this.setState({
     //   recognized: '',
     //   pitch: '',
@@ -88,7 +87,7 @@ function App(){
   };
 
 
-  _stopRecognizing = async () => {
+  const _stopRecognizing = async () => {
     try {
       await Voice.stop();
     } catch (e) {
@@ -96,7 +95,7 @@ function App(){
     }
   };
 
-  _cancelRecognizing = async () => {
+  const _cancelRecognizing = async () => {
     try {
       await Voice.cancel();
     } catch (e) {
