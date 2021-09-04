@@ -1,17 +1,15 @@
 import Voice from '@react-native-voice/voice';
 import React from 'react';
 import {
-  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet, useColorScheme
 } from 'react-native';
+import { Button } from 'react-native-paper';
 import {
   Colors
 } from 'react-native/Libraries/NewAppScreen';
-
-
 
 
 function App(){
@@ -31,44 +29,44 @@ function App(){
 
   onSpeechStart = (e) => {
     console.log('onSpeechStart: ', e);
-    this.setState({
-      started: '√',
-    });
+    // this.setState({
+    //   started: '√',
+    // });
   };
 
   onSpeechRecognized = (e) => {
     console.log('onSpeechRecognized: ', e);
-    this.setState({
-      recognized: '√',
-    });
+    // this.setState({
+    //   recognized: '√',
+    // });
   };
 
   onSpeechEnd = (e) => {
     console.log('onSpeechEnd: ', e);
-    this.setState({
-      end: '√',
-    });
+    // this.setState({
+    //   end: '√',
+    // });
   };
 
   onSpeechError = (e) => {
     console.log('onSpeechError: ', e);
-    this.setState({
-      error: JSON.stringify(e.error),
-    });
+    // this.setState({
+    //   error: JSON.stringify(e.error),
+    // });
   };
 
   onSpeechResults = (e) => {
     console.log('onSpeechResults: ', e);
-    this.setState({
-      results: e.value,
-    });
+    // this.setState({
+    //   results: e.value,
+    // });
   };
 
   onSpeechPartialResults = (e) => {
     console.log('onSpeechPartialResults: ', e);
-    this.setState({
-      partialResults: e.value,
-    });
+    // this.setState({
+    //   partialResults: e.value,
+    // });
   };
 
   _startRecognizing = async () => {
@@ -111,7 +109,7 @@ function App(){
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Button onPress={_startRecognizing()}>TEST</Button>
+         <Button icon="camera" mode="contained" onPress={()=>_startRecognizing()}>Press me</Button>
       </ScrollView>
     </SafeAreaView>
   );
