@@ -2,15 +2,16 @@ import Voice from '@react-native-voice/voice';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar, StyleSheet, useColorScheme, View
+  ScrollView, StatusBar, StyleSheet, useColorScheme, View
 } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import YoutubePlayer from "react-native-youtube-iframe";
 import {
   Colors
 } from 'react-native/Libraries/NewAppScreen';
+import { useSelector } from 'react-redux';
 import store from './src/store';
+import { counterAsync } from './src/thunk';
 import { fetchYoutubeData } from './src/util/fetchYoutubeData';
 
 
@@ -26,7 +27,8 @@ function App(){
   const [data,setData] = useState(store.getState());
   const [playing, setPlaying] = useState(false);
   const [currentPlaying,setCurrentPlaying] = useState(0);
-
+  const counter = useSelector((state) => state.counter)
+  const [showPlayer,setShowPlayer] =useState(false)
   store.subscribe(()=>{
     setData(store.getState().data);
   })
@@ -38,16 +40,22 @@ function App(){
     Voice.onSpeechError = onSpeechError;
     Voice.onSpeechResults = onSpeechResults;
     Voice.onSpeechPartialResults = onSpeechPartialResults;
-    // fetchYoutubeData({searchQuery:'dog'});
-  },[])
   
+  },[])
+  useEffect(()=>{
+    if(counter === 1) {setShowPlayer(true);setPlaying(false);}
+  },[counter])
+  useEffect(()=>{return ()=>Voice.destroy().then(Voice.removeAllListeners)},[])
+
   const onStateChange = useCallback((state) => {
+    console.log(state)
     if (state === "ended") {
       setPlaying(false);
-      setCurrentPlaying(currentPlaying+1);  
-      Alert.alert("video has finished playing!");
+      setShowPlayer(false)
+      setCurrentPlaying(currentPlaying+1);
+      store.dispatch(counterAsync())
     }
-  }, []);
+  }, [currentPlaying]);
 
   const togglePlaying = useCallback(() => {
     setPlaying((prev) => !prev);
@@ -59,70 +67,39 @@ function App(){
     if(result.includes("dogs") || result.includes("dog"))
     {
       _stopRecognizing()
+      setShowPlayer(true)
     return fetchYoutubeData({searchQuery:'dogs'})}
 
     if(result.includes("cats") || result.includes("cat"))
     {_stopRecognizing()
+      setShowPlayer(true)
     return fetchYoutubeData({searchQuery:'cats'})}
 }
- console.log(data)
-
  const onSpeechStart = (e) => {
   console.log('onSpeechStart: √',);
   setStart(true)
-  // this.setState({
-  //   started: '√',
-  // });
+  setCurrentPlaying(0)
 };
 
-const onSpeechRecognized = (e) => {
-  //console.log('onSpeechRecognized: ', e);
-  // this.setState({
-  //   recognized: '√',
-  // });
-};
+const onSpeechRecognized = (e) => null;
 
 const onSpeechEnd = (e) => {
   console.log('onSpeechEnd:  √');
-  // this.setState({
-  //   end: '√',
-  // });
 };
 
 const onSpeechError = (e) => {
-  //console.log('onSpeechError: ', e);
-  // this.setState({
-  //   error: JSON.stringify(e.error),
-  // });
+  alert('onSpeechError: ', e);
 };
 
 const onSpeechResults = (e) => {
   console.log('onSpeechResults: ', e);
-  //_stopRecognizing();
   searchForVideos(e.value)
   setRecognizedArray(e.value);
-  // this.setState({
-  //   results: e.value,
-  // });
 };
 
-const onSpeechPartialResults = (e) => {
-  //console.log('onSpeechPartialResults: ', e);
-  // this.setState({
-  //   partialResults: e.value,
-  // });
-};
+const onSpeechPartialResults = (e) => null;
 
 const _startRecognizing = async () => {
-  // this.setState({
-  //   recognized: '',
-  //   pitch: '',
-  //   error: '',
-  //   started: '',
-  //   results: [],
-  //   partialResults: [],
-  //   end: '',
-  // });
   console.log("STARTING")
   try {
     await Voice.start('en-US');
@@ -149,41 +126,33 @@ const _cancelRecognizing = async () => {
   }
 };
 
-console.log(data)
+console.log(currentPlaying)
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={backgroundStyle} style={{flex:1}}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
+        style={[backgroundStyle,{paddingTop:25,paddingHorizontal:12}]} >
          <Button mode="contained" onPress={start?_stopRecognizing:_startRecognizing}>
            {start?" Press to stop listening":"Press to start listen"}
            </Button>
            <Text>{recognizedArray.toString()}</Text>
-
-           <View>
-      <YoutubePlayer
-        height={300}
-        play={playing}
-        videoId={data[currentPlaying]}
-        onChangeState={onStateChange}
-      />
-      <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
-    </View>
+           <View style={{marginTop:85}}>{showPlayer?<YoutubePlayer
+              height={300}
+              play={playing}
+              videoId={data[currentPlaying]}
+              onChangeState={onStateChange}
+            />:null}
+           {!showPlayer? <Text style={styles.centerText}>Next in {counter}</Text>:null}</View>
       </ScrollView>
     </SafeAreaView>
   );
-
-
-
-  
 };
 
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  centerText: {
+    alignSelf:'center'
   },
   sectionTitle: {
     fontSize: 24,

@@ -9,8 +9,7 @@ import store from '../store';
 export function fetchYoutubeData({searchQuery}){
 
     const API_KEY = CONSTANTS.YOUTUBE_API;
-    const url =`https://youtube.googleapis.com/youtube/v3/search?maxResults=1&q=${searchQuery}&key=${API_KEY}`;
-    //console.log(url)
+    const url =`https://youtube.googleapis.com/youtube/v3/search?maxResults=5&q=${searchQuery}&key=${API_KEY}`;
     const gotData = [];
     axios.get(url).then((res) => {
         const items = get(res.data,'items',[]);
@@ -28,14 +27,11 @@ async function serachforLocalStore(search){
     console.log("ASYNC STORE")
     if(search === 'dogs'){
        const data = await AsyncStorage.getItem('GET_DOGS')
-       console.log(addData(data))
-       //store.dispatch(addData(data))
        return data || false
     }
 
     if(search === 'cats'){
         const data = await AsyncStorage.getItem('GET_CATS')
-        //store.dispatch(addData(data))
         return data || false
     }
 
