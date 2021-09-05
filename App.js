@@ -1,4 +1,5 @@
 import Voice from '@react-native-voice/voice';
+import { get } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   SafeAreaView,
@@ -103,6 +104,8 @@ const _startRecognizing = async () => {
   console.log("STARTING")
   try {
     await Voice.start('en-US');
+    setData([])
+    setShowPlayer(false)
   } catch (e) {
     console.error(e);
   }
@@ -126,7 +129,6 @@ const _cancelRecognizing = async () => {
   }
 };
 
-console.log(currentPlaying)
   return (
     <SafeAreaView style={backgroundStyle} style={{flex:1}}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -143,7 +145,7 @@ console.log(currentPlaying)
               videoId={data[currentPlaying]}
               onChangeState={onStateChange}
             />:null}
-           {!showPlayer? <Text style={styles.centerText}>Next in {counter}</Text>:null}</View>
+           {!(showPlayer) && get(data,'data.length',1) !==0 ? <Text style={styles.centerText}>Next in {counter}</Text>:null}</View>
       </ScrollView>
     </SafeAreaView>
   );

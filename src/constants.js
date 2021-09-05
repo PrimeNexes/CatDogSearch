@@ -1,3 +1,3 @@
 export const CONSTANTS = {
-    YOUTUBE_API: 'AIzaSyAzWIoSDz26XSnaDIZ4M-Q0bXQsYhkPOGY'
+    YOUTUBE_API: 'AIzaSyBnKQkwJ49w6US5dtYENt_Prds-B1eTyuU'
 };
