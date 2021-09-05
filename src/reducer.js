@@ -1,19 +1,14 @@
-import { combineReducers } from 'redux';
 import { DATA_AVAILABLE } from './action';
 
-let dataState = {data: []};
+export const initialState = {data: []};
 
-const dataReducer = (state = dataState, action) => {
+const reducer = (state=initialState, action) => {
   switch (action.type) {
     case DATA_AVAILABLE:
-      return {...state, data: action.data};
+      return {...state, data: action.payload.data};
     default:
       return state;
   }
 };
 
-const rootReducer = combineReducers({
-  dataReducer,
-});
-
-export default rootReducer;
+export default reducer;

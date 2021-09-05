@@ -10,8 +10,7 @@ import { Button } from 'react-native-paper';
 import {
   Colors
 } from 'react-native/Libraries/NewAppScreen';
-import { useSelector } from 'react-redux';
-import { fetchYoutubeData } from './src/util/fetchYoutubeData';
+import store from './src/store';
 
 
 function App(){
@@ -21,8 +20,9 @@ function App(){
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  const [start, setstart] = useState(false);
-  const [fetching,setIsFetching] = useState(false);
+  const [start, setStart] = useState(false);
+  const [recognizedArray, setRecognizedArray] = useState([])
+  const [data,setData] = useState(store.getState());
 
   useEffect(()=>{
     Voice.onSpeechStart = onSpeechStart;
@@ -31,17 +31,18 @@ function App(){
     Voice.onSpeechError = onSpeechError;
     Voice.onSpeechResults = onSpeechResults;
     Voice.onSpeechPartialResults = onSpeechPartialResults;
-    fetchYoutubeData({searchQuery:'dog',setIsFetching});
+    // fetchYoutubeData({searchQuery:'dog'});
   },[])
+
+  store.subscribe(()=>{
+    setData(store.getState());
+  })
   
-  const dataReducer = useSelector(
-    (state) => state.dataReducer,
-  );
-  const {data} = dataReducer;
+ // console.log(data)
 
   const onSpeechStart = (e) => {
     console.log('onSpeechStart: ', e);
-    setstart(true)
+    setStart(true)
     // this.setState({
     //   started: '√',
     // });
@@ -70,6 +71,8 @@ function App(){
 
   const onSpeechResults = (e) => {
     console.log('onSpeechResults: ', e);
+    _stopRecognizing();
+    setRecognizedArray(e);
     // this.setState({
     //   results: e.value,
     // });
@@ -102,7 +105,6 @@ function App(){
 
 
   const _stopRecognizing = async () => {
-    console.log(stop)
     try {
       await Voice.stop();
     } catch (e) {
@@ -118,14 +120,13 @@ function App(){
     }
   };
 
-  console.log(data)
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-         <Button icon="camera" mode="contained" onPress={start?_stopRecognizing:_startRecognizing}>Press me</Button>
+         <Button mode="contained" onPress={start?_stopRecognizing:_startRecognizing}>Press me</Button>
       </ScrollView>
     </SafeAreaView>
   );
