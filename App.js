@@ -138,7 +138,7 @@ const _cancelRecognizing = async () => {
          <Button mode="contained" onPress={start?_stopRecognizing:_startRecognizing}>
            {start?" Press to stop listening":"Press to start listen"}
            </Button>
-           <Text>{recognizedArray.toString()}</Text>
+           <Text style={styles.speachText}>{recognizedArray.toString()}</Text>
            <View style={{marginTop:85}}>{showPlayer?<YoutubePlayer
               height={300}
               play={playing}
@@ -154,8 +154,10 @@ const _cancelRecognizing = async () => {
 
 const styles = StyleSheet.create({
   centerText: {
-    alignSelf:'center'
+    alignSelf:'center',
+    fontSize:20
   },
+  speachText:{fontSize:24,marginTop:8},
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',
