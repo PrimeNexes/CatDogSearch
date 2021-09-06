@@ -69,12 +69,12 @@ function App(){
     {
       _stopRecognizing()
       setShowPlayer(true)
-    return fetchYoutubeData({searchQuery:'dogs'})}
+    return store.dispatch(fetchYoutubeData({searchQuery:'dogs'}))}
 
     if(result.includes("cats") || result.includes("cat"))
     {_stopRecognizing()
       setShowPlayer(true)
-    return fetchYoutubeData({searchQuery:'cats'})}
+    return store.dispatch(fetchYoutubeData({searchQuery:'cats'}))}
 }
  const onSpeechStart = (e) => {
   console.log('onSpeechStart: √',);

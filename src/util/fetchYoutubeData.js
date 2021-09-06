@@ -3,11 +3,10 @@ import axios from 'axios';
 import { get } from 'lodash';
 import { addData } from '../action';
 import { CONSTANTS } from '../constants';
-import store from '../store';
 
 
 export function fetchYoutubeData({searchQuery}){
-
+    return(dispatch)=>{
     const API_KEY = CONSTANTS.YOUTUBE_API;
     const url =`https://youtube.googleapis.com/youtube/v3/search?maxResults=5&q=${searchQuery}&key=${API_KEY}`;
     const gotData = [];
@@ -17,10 +16,10 @@ export function fetchYoutubeData({searchQuery}){
             const videoID =get(item,'id.videoId','');
             gotData.push(videoID);      
         })
-         store.dispatch(addData(gotData))
+         dispatch(addData(gotData))
     })
     .catch((err) => alert(err));
-    
+}
 };
 
 async function serachforLocalStore(search){
