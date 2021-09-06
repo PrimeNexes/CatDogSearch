@@ -22,6 +22,8 @@ export function fetchYoutubeData({searchQuery}){
 }
 };
 
+
+//For Local storage if required
 async function serachforLocalStore(search){
     console.log("ASYNC STORE")
     if(search === 'dogs'){

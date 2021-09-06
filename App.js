@@ -121,13 +121,6 @@ const _stopRecognizing = async () => {
   }
 };
 
-const _cancelRecognizing = async () => {
-  try {
-    await Voice.cancel();
-  } catch (e) {
-    console.error(e);
-  }
-};
 
   return (
     <SafeAreaView style={backgroundStyle} style={{flex:1}}>
@@ -158,18 +151,6 @@ const styles = StyleSheet.create({
     fontSize:20
   },
   speachText:{fontSize:24,marginTop:8},
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
 });
 
 export default App;
